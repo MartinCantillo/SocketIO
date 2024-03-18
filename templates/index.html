@@ -6,33 +6,58 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Chat python IO</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- Enlace a Bootstrap CSS -->
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
+    <!-- Enlace al archivo CSS principal -->
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
 </head>
 
 <body>
-    <h1>Socket IO</h1>
-    <ul id="message"></ul>
-    <form id="messageform">
-        <input type="text" id="messageInput" autocomplete="off" />
-        <button>Send</button>
-    </form>
+    <!-- Contenedor principal -->
+    <div class="container mt-5">
+        <!-- Encabezado -->
+        <h1 class="text-center mb-4">Real-Time Chat</h1>
+        <!-- Lista de mensajes -->
+        <ul id="messages" class="list-group mb-4"></ul>
+        <!-- Formulario de envío de mensajes -->
+        <form id="messageform" class="form-inline justify-content-center">
+            <input type="text" id="messageInput" class="form-control mr-2" placeholder="Type your message here..."
+                autocomplete="off" />
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+
+    <!-- Inclusión de la biblioteca Socket.IO -->
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"
         integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
         crossorigin="anonymous"></script>
     <script>
+        // Conexión al servidor Socket.IO
         var socket = io.connect('http://' + document.domain + ":" + location.port);
-        document.getElementById('messageform').onsubmit = function name(event) {
-            event.preventDefault();//no recargar la pagina sino de manera asincrona
+
+        // Captura del evento de envío del formulario
+        document.getElementById('messageform').onsubmit = function (event) {
+            // Evitar el envío del formulario por defecto
+            event.preventDefault();
+            // Obtener el valor del campo de entrada de texto
             var messageInput = document.getElementById('messageInput');
-            socket.emit('message', messageInput.value);//Emitir el mensaje 
+            // Emitir el mensaje al servidor
+            socket.emit('message', messageInput.value);
+            // Limpiar el campo de entrada de texto
             messageInput.value = "";
         }
-        //Para mostrar la informacion
+
+        // Captura del evento de recepción de mensajes del servidor
         socket.on('message', function (msg) {
-            var ul = document.getElementById("messages")
-            var li = document.createElement();
-            li.appendChild(document.createTextNode(msg));//LLenar la informacion que viene del backend
+            // Obtener la lista de mensajes
+            var ul = document.getElementById("messages");
+            // Crear un elemento de lista
+            var li = document.createElement('li');
+            // Añadir clases de Bootstrap al elemento de lista
+            li.classList.add("list-group-item");
+            // Añadir el mensaje recibido como texto al elemento de lista
+            li.appendChild(document.createTextNode(msg));
+            // Añadir el elemento de lista a la lista de mensajes
             ul.appendChild(li);
         })
     </script>
