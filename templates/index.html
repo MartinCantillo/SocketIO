@@ -32,6 +32,8 @@
         socket.on('message', function (msg) {
             var ul = document.getElementById("messages")
             var li = document.createElement();
+            li.appendChild(document.createTextNode(msg));//LLenar la informacion que viene del backend
+            ul.appendChild(li);
         })
     </script>
 </body>
